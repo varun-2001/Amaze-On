@@ -38,6 +38,8 @@ class _HomePageState extends State<HomePage> {
       // create a body that has a scrollable gridview that builds a list of product cards using data.dart
       body: GridView.count(
         crossAxisCount: 2,
+        childAspectRatio: 10 /
+            16, //this is by trial and error. by default it is 1. so i changed it to 10/16. i recommend you to play around with this value or use the staggered gridview package as it dynamically adjusts the height of the card for you
         children: List.generate(2, (index) {
           return const ProductCard();
         }),

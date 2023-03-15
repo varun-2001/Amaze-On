@@ -13,7 +13,7 @@ class ProductCard extends StatelessWidget {
         vertical: 10,
         horizontal: 20,
       ),
-      height: size.height * 0.3,
+      // height: size.height * 0.3,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
@@ -28,27 +28,29 @@ class ProductCard extends StatelessWidget {
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 10),
+          // SizedBox(height: 10),
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image.asset(
               "assets/bottle.jpeg",
               fit: BoxFit.cover,
-              height: size.height * 0.3,
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 12), //this is usually in multiples of  4,6 or 8.
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 "Water Bottle",
+                maxLines:
+                    2, //to limit the number of lines so that it doesnt break the layout
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 3),
+              // SizedBox(height: 3),
               Text(
                 "\$ 10",
                 style: TextStyle(
