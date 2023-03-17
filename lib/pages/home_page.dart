@@ -1,4 +1,8 @@
-import 'package:exelon_shopping/widgets/product_card_new.dart';
+import 'package:exelon_shopping/model/methods.dart';
+import 'package:exelon_shopping/pages/add_product.dart';
+import 'package:exelon_shopping/pages/product_cart.dart';
+import 'package:exelon_shopping/widgets/product_card.dart';
+import 'package:exelon_shopping/widgets/product_info.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,24 +29,85 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(color: Colors.black45),
           ),
         ),
-        actions: const <Widget>[
+        actions: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Icon(
-              Icons.shopping_cart,
-              color: Colors.black45,
+            padding: const EdgeInsets.only(right: 20.0),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProductCart(),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.shopping_cart,
+                color: Colors.black45,
+              ),
             ),
           ),
         ],
       ),
       // create a body that has a scrollable gridview that builds a list of product cards using data.dart
-      body: GridView.count(
-        crossAxisCount: 2,
-        children: List.generate(2, (index) {
-          return const ProductCard();
-        }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context)
+              .push(
+                // create dialog box to add data
+                DialogRoute(
+                  context: context,
+                  builder: (BuildContext context) => const AddProduct(),
+                ),
+              )
+              .then(
+                (value) => setState(() {}),
+              );
+        },
+        backgroundColor: Colors.green[200],
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
       ),
-      // body: Center(child: ProductCard()),
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: FutureBuilder(
+          future: getProducts(),
+          builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return GridView.count(
+                childAspectRatio: 10 / 16,
+                crossAxisCount: 2,
+                children: List.generate(
+                  snapshot.data.length,
+                  (index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductInfo(
+                              product: snapshot.data[index],
+                            ),
+                          ),
+                        ).then((value) => setState(() {}));
+                      },
+                      child: ProductCard(
+                        product: snapshot.data[index],
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }

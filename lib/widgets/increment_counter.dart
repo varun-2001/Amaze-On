@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 class CounterWidget extends StatefulWidget {
   final int initialValue;
+  final Function(int) onCounterValueChanged; // added new parameter
 
-  const CounterWidget({Key? key, this.initialValue = 0}) : super(key: key);
+  const CounterWidget(
+      {Key? key, this.initialValue = 0, required this.onCounterValueChanged})
+      : super(key: key);
 
   @override
   _CounterWidgetState createState() => _CounterWidgetState();
@@ -21,12 +24,16 @@ class _CounterWidgetState extends State<CounterWidget> {
   void _incrementCounter() {
     setState(() {
       _counter++;
+      widget.onCounterValueChanged(
+          _counter); // calling the function to pass value to parent widget
     });
   }
 
   void _decrementCounter() {
     setState(() {
       _counter--;
+      widget.onCounterValueChanged(
+          _counter); // calling the function to pass value to parent widget
     });
   }
 
@@ -35,8 +42,8 @@ class _CounterWidgetState extends State<CounterWidget> {
     return Container(
       height: 35,
       decoration: BoxDecoration(
-        // add box border with black color
-        border: Border.all(color: Colors.black),  
+// add box border with black color
+        border: Border.all(color: Colors.black),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(

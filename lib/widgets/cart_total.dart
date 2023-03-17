@@ -1,7 +1,16 @@
+import 'package:exelon_shopping/model/methods.dart';
 import 'package:flutter/material.dart';
 
-class CartTotal extends StatelessWidget {
-  const CartTotal({super.key});
+class CartTotal extends StatefulWidget {
+
+  CartTotal({super.key});
+
+  @override
+  State<CartTotal> createState() => _CartTotalState();
+}
+
+class _CartTotalState extends State<CartTotal> {
+  final cartTotal = getCartTotal();
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +25,8 @@ class CartTotal extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: const [
-          Text(
+        children: [
+          const Text(
             'Total',
             style: TextStyle(
               fontSize: 20,
@@ -25,8 +34,9 @@ class CartTotal extends StatelessWidget {
             ),
           ),
           Text(
-            '\$29.97',
-            style: TextStyle(
+            // use cartTotal variable
+            '\$${cartTotal.toStringAsFixed(2)}',
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),

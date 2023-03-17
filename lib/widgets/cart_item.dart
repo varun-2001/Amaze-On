@@ -1,8 +1,34 @@
 import 'package:exelon_shopping/widgets/increment_counter.dart';
 import 'package:flutter/material.dart';
 
-class CartItem extends StatelessWidget {
-  const CartItem({super.key});
+import '../model/cart.dart';
+import '../model/product_model.dart';
+
+class CartItem extends StatefulWidget {
+  // add Product and quantity parameter
+  final Product product;
+  final int quantity;
+  
+  // const CartItem({super.key});
+  const CartItem({
+    Key? key,
+    required this.product,
+    required this.quantity,
+  }) : super(key: key);
+
+  @override
+  State<CartItem> createState() => _CartItemState();
+}
+
+class _CartItemState extends State<CartItem> {
+   int _counterValue = 0;
+
+  void _onCounterValueChanged(int counterValue) {
+    setState(() {
+      _counterValue = counterValue;
+      cart[widget.product] = _counterValue; // update the quantity of product
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,29 +47,32 @@ class CartItem extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              'assets/bottle.jpeg',
+            child: Image.network(
+              widget.product.imageUrl,
+              height: size.height / 6,
+              width: size.width / 4,
+              fit: BoxFit.cover
             ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
-                'Water Bottle',
-                style: TextStyle(
+                widget.product.name,
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text('Lorem ipsum dolor',
+              const Text('Lorem ipsum dolor',
                   style: TextStyle(
                     fontSize: 12,
                   )),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
-                '\$9.99',
-                style: TextStyle(
+                '\$${widget.product.price}',
+                style: const TextStyle(
                   fontSize: 20,
                   
                   fontWeight: FontWeight.bold,
@@ -51,7 +80,10 @@ class CartItem extends StatelessWidget {
               ),
             ],
           ),
-          const CounterWidget(),
+          CounterWidget(
+            initialValue: widget.quantity,
+            onCounterValueChanged: _onCounterValueChanged,
+          ),
         ],
       ),
     );
